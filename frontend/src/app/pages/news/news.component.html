@@ -1,0 +1,17 @@
+<!-- news area -->
+<section id="news-list" style="padding: 6vw 10%; background-color: #fefefe;">
+  <h2 data-aos="fade-up" style="font-size: 2.5rem; color: #405751; font-family: 'Cormorant Garamond', serif;">最新消息
+  </h2>
+  <p data-aos="fade-up" style="margin-bottom: 2rem; color: #555;">掌握 THE TRÈSOR 的最新活動與公告</p>
+
+  <div class="news-grid">
+    <div class="news-card" *ngFor="let news of newsList" data-aos="fade-up" [attr.data-aos-delay]="news.delay">
+      <img [src]="news.image" [alt]="news.title" />
+      <div class="news-date">{{ news.date }}</div>
+      <h3>{{ news.title }}</h3>
+      <p>{{ news.content }}</p>
+      <a href="#" class="news-btn">閱讀更多</a>
+    </div>
+  </div>
+  <div class="read-more"><a href="#" class="news-btn">查看更多</a></div>
+</section>

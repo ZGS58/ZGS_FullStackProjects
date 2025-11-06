@@ -1,0 +1,127 @@
+<!-- room area -->
+<section id="room-area" style="padding: 6vw 10%; background-color: #f9f9f9;">
+  <!-- 通知訊息 -->
+  <div *ngIf="notification.show" class="notification" [class.success]="notification.type === 'success'"
+    [class.error]="notification.type === 'error'" [class.info]="notification.type === 'info'">
+    <span class="notification-icon">
+      <span *ngIf="notification.type === 'success'">✓</span>
+      <span *ngIf="notification.type === 'error'">✕</span>
+      <span *ngIf="notification.type === 'info'">ℹ</span>
+    </span>
+    <span class="notification-message">{{ notification.message }}</span>
+    <button class="close-notification" (click)="hideNotification()">×</button>
+  </div>
+
+  <h2 data-aos="fade-up" style="font-size: 2.5rem; color: #405751; font-family: 'Cormorant Garamond', serif;">房型一覽</h2>
+  <p data-aos="fade-up" style="margin: 1rem 0 2rem; color: #555; font-size: 1.1rem;">
+    精選舒適房型，為您打造完美的度假體驗
+  </p>
+
+  <div class="room-grid">
+    <div class="room-card" *ngFor="let room of rooms" data-aos="fade-up">
+      <h3>{{ room.name }}</h3>
+      <p class="room-type">{{ room.type }}</p>
+      <p class="room-description">{{ room.description }}</p>
+      <p class="room-info" *ngIf="room.capacity">可容納 {{ room.capacity }} 人</p>
+      <p class="room-info" *ngIf="room.stock !== undefined">剩餘房間：{{ room.stock }} 間</p>
+      <div class="price">${{ room.price }} / 晚</div>
+      <button class="room-btn" (click)="viewRoomDetail(room)" [disabled]="room.available === false || room.stock === 0">
+        {{ room.available === false || room.stock === 0 ? '暫不開放' : '查看詳情 & 訂房' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- 房間詳情與訂房彈窗 -->
+  <div class="room-detail-modal" *ngIf="selectedRoom" (click)="closeDetail()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button class="close-btn" (click)="closeDetail()">×</button>
+
+      <div class="room-detail-header">
+        <h2>{{ selectedRoom.name }}</h2>
+        <p class="room-type-large">{{ selectedRoom.type }}</p>
+      </div>
+
+      <div class="room-info" style="display: flex; flex-direction: column;">
+        <p class="description">{{ selectedRoom.description }}</p>
+        <p class="capacity-info" *ngIf="selectedRoom.capacity">
+          <strong>可容納人數：</strong>{{ selectedRoom.capacity }} 人
+        </p>
+        <p class="stock-info" *ngIf="selectedRoom.stock !== undefined">
+          <strong>可訂房間：</strong>{{ selectedRoom.stock }} 間
+        </p>
+        <div class="price-large">${{ selectedRoom.price }} / 晚</div>
+      </div>
+
+      <!-- 訂房表單 -->
+      <div class="booking-form" *ngIf="isLoggedIn && selectedRoom.available !== false && selectedRoom.stock !== 0">
+        <h3>立即訂房</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>入住日期</label>
+            <input type="date" [(ngModel)]="bookingForm.checkIn" />
+          </div>
+          <div class="form-group">
+            <label>退房日期</label>
+            <input type="date" [(ngModel)]="bookingForm.checkOut" />
+          </div>
+        </div>
+        <div class="form-row" *ngIf="selectedRoom.capacity">
+          <div class="form-group">
+            <label>入住人數</label>
+            <input type="number" [(ngModel)]="bookingForm.guestCount" [max]="selectedRoom.capacity" min="1"
+              placeholder="請輸入人數" />
+            <small *ngIf="selectedRoom.capacity">最多 {{ selectedRoom.capacity }} 人</small>
+          </div>
+        </div>
+        <button (click)="createBooking()" class="booking-btn">確認訂房</button>
+      </div>
+      <div class="login-prompt" *ngIf="!isLoggedIn">
+        <p>請先登入以進行訂房</p>
+      </div>
+      <div class="unavailable-prompt"
+        *ngIf="isLoggedIn && (selectedRoom.available === false || selectedRoom.stock === 0)">
+        <p>此房型目前暫不開放訂房</p>
+      </div>
+
+      <!-- 評論區 -->
+      <div class="reviews-section">
+        <h3>房客評論</h3>
+
+        <!-- 評論表單 -->
+        <div class="review-form" *ngIf="isLoggedIn">
+          <h4>留下您的評論</h4>
+          <div class="rating-input">
+            <label>評分：</label>
+            <select [(ngModel)]="newReview.rating">
+              <option [value]="5">⭐⭐⭐⭐⭐ (5星)</option>
+              <option [value]="4">⭐⭐⭐⭐ (4星)</option>
+              <option [value]="3">⭐⭐⭐ (3星)</option>
+              <option [value]="2">⭐⭐ (2星)</option>
+              <option [value]="1">⭐ (1星)</option>
+            </select>
+          </div>
+          <textarea [(ngModel)]="newReview.comment" placeholder="分享您的入住體驗..." rows="4"></textarea>
+          <button (click)="submitReview()" class="submit-btn">送出評論</button>
+        </div>
+
+        <!-- 評論列表 -->
+        <div class="reviews-list">
+          <div class="review-item" *ngFor="let review of reviews">
+            <div class="review-header">
+              <span class="reviewer-name">{{ review.username }}</span>
+              <span class="review-rating">{{ '⭐'.repeat(review.rating || 0) }}</span>
+              <span class="review-date">{{ review.createdAt | date:'yyyy/MM/dd' }}</span>
+              <!-- 管理員或評論發布者可刪除 -->
+              <button *ngIf="canDeleteReview(review) && review.id" class="delete-review-btn"
+                (click)="deleteReview(review.id!)" [title]="isAdmin ? '管理員刪除評論' : '刪除我的評論'">
+                刪除
+              </button>
+            </div>
+            <p class="review-comment">{{ review.comment }}</p>
+          </div>
+          <p class="no-reviews" *ngIf="reviews.length === 0">目前尚無評論</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,82 @@
+<div class="booking-management-container">
+    <h1>訂房管理</h1>
+
+    <!-- 訊息提示 -->
+    <div *ngIf="message" class="alert alert-success">
+        {{ message }}
+    </div>
+    <div *ngIf="errorMessage" class="alert alert-error">
+        {{ errorMessage }}
+    </div>
+
+    <!-- 訂房列表 -->
+    <div class="bookings-table-container">
+        <table class="bookings-table">
+            <thead>
+                <tr>
+                    <th>訂單ID</th>
+                    <th>用戶名</th>
+                    <th>房型</th>
+                    <th>入住日期</th>
+                    <th>退房日期</th>
+                    <th>總價</th>
+                    <th>狀態</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let booking of bookings">
+                    <ng-container *ngIf="editingBooking?.id !== booking.id">
+                        <td>{{ booking.id }}</td>
+                        <td>{{ booking.username }}</td>
+                        <td>{{ booking.roomName }}</td>
+                        <td>{{ booking.checkIn }}</td>
+                        <td>{{ booking.checkOut }}</td>
+                        <td>${{ booking.totalPrice }}</td>
+                        <td>
+                            <span [class]="getStatusClass(booking.status || '')">
+                                {{ getStatusLabel(booking.status || '') }}
+                            </span>
+                        </td>
+                        <td class="actions">
+                            <button (click)="startEdit(booking)" class="btn btn-edit">編輯狀態</button>
+                            <button (click)="deleteBooking(booking)" class="btn btn-delete">刪除</button>
+                        </td>
+                    </ng-container>
+
+                    <!-- 編輯模式 -->
+                    <ng-container *ngIf="editingBooking?.id === booking.id">
+                        <td>{{ booking.id }}</td>
+                        <td>{{ booking.username }}</td>
+                        <td>{{ booking.roomName }}</td>
+                        <td>{{ booking.checkIn }}</td>
+                        <td>{{ booking.checkOut }}</td>
+                        <td>${{ booking.totalPrice }}</td>
+                        <td>
+                            <select [(ngModel)]="editStatus" class="status-select">
+                                <option *ngFor="let option of statusOptions" [value]="option.value">
+                                    {{ option.label }}
+                                </option>
+                            </select>
+                        </td>
+                        <td class="actions">
+                            <button (click)="updateBookingStatus()" class="btn btn-save">保存</button>
+                            <button (click)="cancelEdit()" class="btn btn-cancel">取消</button>
+                        </td>
+                    </ng-container>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 分頁控制 -->
+        <div class="pagination" *ngIf="totalPages > 1">
+            <button (click)="previousPage()" [disabled]="currentPage === 0" class="btn-page">上一頁</button>
+
+            <span class="page-info">
+                第 {{ currentPage + 1 }} / {{ totalPages }} 頁 (共 {{ totalElements }} 筆)
+            </span>
+
+            <button (click)="nextPage()" [disabled]="currentPage === totalPages - 1" class="btn-page">下一頁</button>
+        </div>
+    </div>
+</div>

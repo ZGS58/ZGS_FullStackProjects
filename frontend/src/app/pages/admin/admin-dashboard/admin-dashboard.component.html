@@ -1,0 +1,549 @@
+<div class="admin-dashboard-container">
+  <h1>管理員控制台</h1>
+
+  <!-- 標籤切換 -->
+  <div class="tabs">
+    <button [class.active]="activeTab === 'users'" (click)="switchTab('users')" class="tab-button">
+      用戶管理
+    </button>
+    <button [class.active]="activeTab === 'bookings'" (click)="switchTab('bookings')" class="tab-button">
+      訂房管理
+    </button>
+    <button [class.active]="activeTab === 'products'" (click)="switchTab('products')" class="tab-button">
+      商品管理
+    </button>
+    <button [class.active]="activeTab === 'rooms'" (click)="switchTab('rooms')" class="tab-button">
+      房型管理
+    </button>
+    <button [class.active]="activeTab === 'orders'" (click)="switchTab('orders')" class="tab-button">
+      訂單管理
+    </button>
+    <button [class.active]="activeTab === 'contacts'" (click)="switchTab('contacts')" class="tab-button">
+      聯絡表單
+    </button>
+  </div>
+
+  <!-- 訊息提示 -->
+  <div *ngIf="message" class="alert alert-success">
+    {{ message }}
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-error">
+    {{ errorMessage }}
+  </div>
+
+  <!-- 用戶管理內容 -->
+  <div *ngIf="activeTab === 'users'" class="tab-content">
+    <div class="search-bar">
+      <input type="text" [(ngModel)]="usersKeyword" placeholder="搜尋用戶名 / Email / 姓名">
+      <button class="btn btn-primary" (click)="searchUsers()">搜尋</button>
+    </div>
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>用戶名</th>
+            <th>電子郵件</th>
+            <th>姓名</th>
+            <th>角色</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <ng-container *ngIf="editingUser?.id !== user.id">
+              <td>{{ user.id }}</td>
+              <td>{{ user.username }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.fullname }}</td>
+              <td>
+                <span *ngFor="let role of user.roleNames" class="role-badge">
+                  {{ role }}
+                </span>
+              </td>
+              <td class="actions">
+                <button (click)="startEdit(user)" class="btn btn-edit">編輯</button>
+                <button (click)="deleteUser(user)" class="btn btn-delete">刪除</button>
+              </td>
+            </ng-container>
+
+            <ng-container *ngIf="editingUser?.id === user.id">
+              <td>{{ user.id }}</td>
+              <td>{{ user.username }}</td>
+              <td>
+                <input type="email" [(ngModel)]="editUserForm.email" class="edit-input">
+              </td>
+              <td>
+                <input type="text" [(ngModel)]="editUserForm.fullname" class="edit-input">
+              </td>
+              <td>
+                <div class="role-checkboxes">
+                  <label *ngFor="let role of roleOptions" class="role-checkbox">
+                    <input type="checkbox" [checked]="isRoleSelected(role)" (change)="toggleRole(role)">
+                    {{ role }}
+                  </label>
+                </div>
+              </td>
+              <td class="actions">
+                <button (click)="updateUser()" class="btn btn-save">保存</button>
+                <button (click)="cancelEdit()" class="btn btn-cancel">取消</button>
+              </td>
+            </ng-container>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination" *ngIf="usersTotalPages > 1">
+        <button (click)="usersPreviousPage()" [disabled]="usersCurrentPage === 0" class="btn-page">上一頁</button>
+        <span class="page-info">第 {{ usersCurrentPage + 1 }} / {{ usersTotalPages }} 頁 (共 {{ usersTotalElements
+          }} 筆)</span>
+        <button (click)="usersNextPage()" [disabled]="usersCurrentPage === usersTotalPages - 1"
+          class="btn-page">下一頁</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 訂房管理內容 -->
+  <div *ngIf="activeTab === 'bookings'" class="tab-content">
+    <div class="search-bar">
+      <input type="text" [(ngModel)]="bookingsKeyword" placeholder="搜尋用戶名 / 房型名稱 / 狀態" style="min-width: 210px;">
+      <button class="btn btn-primary" (click)="searchBookings()">搜尋</button>
+    </div>
+    <div class="table-container">
+      <table class="data-table bookings-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>用戶名</th>
+            <th>房型</th>
+            <th>入住日期</th>
+            <th>退房日期</th>
+            <th>入住人數</th>
+            <th>總價</th>
+            <th>狀態</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let booking of bookings">
+            <ng-container *ngIf="editingBooking?.id !== booking.id">
+              <td>{{ booking.id }}</td>
+              <td>{{ booking.username }}</td>
+              <td>{{ booking.roomName }}</td>
+              <td>{{ booking.checkIn }}</td>
+              <td>{{ booking.checkOut }}</td>
+              <td>{{ booking.guestCount || '-' }}</td>
+              <td>${{ booking.totalPrice }}</td>
+              <td>
+                <span [class]="getStatusClass(booking.status || '')">
+                  {{ getStatusLabel(booking.status || '') }}
+                </span>
+              </td>
+              <td class="actions">
+                <button (click)="startBookingEdit(booking)" class="btn btn-edit">編輯</button>
+                <button (click)="deleteBooking(booking)" class="btn btn-delete">刪除</button>
+              </td>
+            </ng-container>
+
+            <ng-container *ngIf="editingBooking?.id === booking.id">
+              <td>{{ booking.id }}</td>
+              <td>{{ booking.username }}</td>
+              <td>{{ booking.roomName }}</td>
+              <td>{{ booking.checkIn }}</td>
+              <td>{{ booking.checkOut }}</td>
+              <td>{{ booking.guestCount || '-' }}</td>
+              <td>${{ booking.totalPrice }}</td>
+              <td>
+                <select [(ngModel)]="editStatus" class="status-select">
+                  <option *ngFor="let option of statusOptions" [value]="option.value">
+                    {{ option.label }}
+                  </option>
+                </select>
+              </td>
+              <td class="actions">
+                <button (click)="updateBookingStatus()" class="btn btn-save">保存</button>
+                <button (click)="cancelBookingEdit()" class="btn btn-cancel">取消</button>
+              </td>
+            </ng-container>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination" *ngIf="bookingsTotalPages > 1">
+        <button (click)="bookingsPreviousPage()" [disabled]="bookingsCurrentPage === 0" class="btn-page">上一頁</button>
+        <span class="page-info">第 {{ bookingsCurrentPage + 1 }} / {{ bookingsTotalPages }} 頁 (共 {{
+          bookingsTotalElements }} 筆)</span>
+        <button (click)="bookingsNextPage()" [disabled]="bookingsCurrentPage === bookingsTotalPages - 1"
+          class="btn-page">下一頁</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 商品管理內容 -->
+  <div *ngIf="activeTab === 'products'" class="tab-content">
+    <div class="actions-bar">
+      <button (click)="startAddProduct()" class="btn btn-primary" *ngIf="!isAddingProduct">+ 新增商品</button>
+    </div>
+
+    <!-- 新增商品表單 -->
+    <div *ngIf="isAddingProduct" class="add-form">
+      <h3>新增商品</h3>
+      <div class="form-group">
+        <label>商品名稱：</label>
+        <input type="text" [(ngModel)]="newProduct.name" class="form-input">
+      </div>
+      <div class="form-group">
+        <label>商品描述：</label>
+        <textarea [(ngModel)]="newProduct.description" class="form-input" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label>價格：</label>
+        <input type="number" [(ngModel)]="newProduct.price" class="form-input" min="0">
+      </div>
+      <div class="form-group">
+        <label>庫存數量：</label>
+        <input type="number" [(ngModel)]="newProduct.stock" class="form-input" min="0">
+      </div>
+      <div class="form-group">
+        <label>圖片網址：</label>
+        <input type="text" [(ngModel)]="newProduct.imageUrl" class="form-input">
+      </div>
+      <div class="form-actions">
+        <button (click)="createProduct()" class="btn btn-save">保存</button>
+        <button (click)="cancelProductEdit()" class="btn btn-cancel">取消</button>
+      </div>
+    </div>
+
+    <!-- 商品列表 -->
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>商品名稱</th>
+            <th>描述</th>
+            <th>價格</th>
+            <th>庫存</th>
+            <th>圖片</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of products">
+            <ng-container *ngIf="editingProduct?.id !== product.id">
+              <td>{{ product.id }}</td>
+              <td>{{ product.name }}</td>
+              <td>{{ product.description }}</td>
+              <td>${{ product.price }}</td>
+              <td>{{ product.stock || 0 }}</td>
+              <td>
+                <img [src]="product.imageUrl" alt="{{ product.name }}" class="product-thumb">
+              </td>
+              <td class="actions">
+                <button (click)="startProductEdit(product)" class="btn btn-edit">編輯</button>
+                <button (click)="deleteProduct(product)" class="btn btn-delete">刪除</button>
+              </td>
+            </ng-container>
+
+            <ng-container *ngIf="editingProduct?.id === product.id && editingProduct">
+              <td>{{ product.id }}</td>
+              <td>
+                <input type="text" [(ngModel)]="editingProduct!.name" class="edit-input">
+              </td>
+              <td>
+                <textarea [(ngModel)]="editingProduct!.description" class="edit-input" rows="2"></textarea>
+              </td>
+              <td>
+                <input type="number" [(ngModel)]="editingProduct!.price" class="edit-input" min="0">
+              </td>
+              <td>
+                <input type="number" [(ngModel)]="editingProduct!.stock" class="edit-input" min="0">
+              </td>
+              <td>
+                <input type="text" [(ngModel)]="editingProduct!.imageUrl" class="edit-input">
+              </td>
+              <td class="actions">
+                <button (click)="updateProduct()" class="btn btn-save">保存</button>
+                <button (click)="cancelProductEdit()" class="btn btn-cancel">取消</button>
+              </td>
+            </ng-container>
+          </tr>
+        </tbody>
+      </table>
+      <div class="pagination" *ngIf="productsTotalPages > 1">
+        <button (click)="productsPreviousPage()" [disabled]="productsCurrentPage === 0" class="btn-page">上一頁</button>
+        <span class="page-info">第 {{ productsCurrentPage + 1 }} / {{ productsTotalPages }} 頁 (共 {{ productsTotalElements
+          }} 筆)</span>
+        <button (click)="productsNextPage()" [disabled]="productsCurrentPage === productsTotalPages - 1"
+          class="btn-page">下一頁</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 房型管理內容 -->
+  <div *ngIf="activeTab === 'rooms'" class="tab-content">
+    <button *ngIf="!isAddingRoom" (click)="startAddRoom()" class="btn btn-primary mb-3">
+      + 新增房型
+    </button>
+
+    <!-- 新增房型表單 -->
+    <div *ngIf="isAddingRoom" class="add-form">
+      <h3>新增房型</h3>
+      <div class="form-group">
+        <label>房型名稱：</label>
+        <input type="text" [(ngModel)]="newRoom.name" class="form-input">
+      </div>
+      <div class="form-group">
+        <label>房型類型：</label>
+        <input type="text" [(ngModel)]="newRoom.type" class="form-input">
+      </div>
+      <div class="form-group">
+        <label>房型描述：</label>
+        <textarea [(ngModel)]="newRoom.description" class="form-input" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label>每晚價格：</label>
+        <input type="number" [(ngModel)]="newRoom.price" class="form-input" min="0">
+      </div>
+      <div class="form-group">
+        <label>可容納人數：</label>
+        <input type="number" [(ngModel)]="newRoom.capacity" class="form-input" min="1">
+      </div>
+      <div class="form-group">
+        <label>可預訂數量：</label>
+        <input type="number" [(ngModel)]="newRoom.stock" class="form-input" min="0">
+      </div>
+      <div class="form-group">
+        <label>是否開放預訂：</label>
+        <select [(ngModel)]="newRoom.available" class="form-input">
+          <option [value]="true">開放</option>
+          <option [value]="false">關閉</option>
+        </select>
+      </div>
+      <!-- <div class="form-group">
+        <label>圖片網址：</label>
+        <input type="text" [(ngModel)]="newRoom.imageUrl" class="form-input">
+      </div> -->
+      <div class="form-actions">
+        <button (click)="createRoom()" class="btn btn-save">新增</button>
+        <button (click)="cancelRoomEdit()" class="btn btn-cancel">取消</button>
+      </div>
+    </div>
+
+    <!-- 房型列表 -->
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>房型名稱</th>
+            <th>類型</th>
+            <th>描述</th>
+            <th>價格</th>
+            <th>容納人數</th>
+            <th>庫存</th>
+            <th>狀態</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let room of rooms">
+            <ng-container *ngIf="editingRoom?.id !== room.id">
+              <td>{{ room.id }}</td>
+              <td>{{ room.name }}</td>
+              <td>{{ room.type }}</td>
+              <td>{{ room.description }}</td>
+              <td>${{ room.price }}</td>
+              <td>{{ room.capacity || '-' }}</td>
+              <td>{{ room.stock || 0 }}</td>
+              <td>
+                <span [class]="room.available ? 'badge-success' : 'badge-danger'">
+                  {{ room.available ? '開放' : '關閉' }}
+                </span>
+              </td>
+              <td class="actions">
+                <button (click)="startRoomEdit(room)" class="btn btn-edit">編輯</button>
+                <button (click)="deleteRoom(room)" class="btn btn-delete">刪除</button>
+              </td>
+            </ng-container>
+
+            <ng-container *ngIf="editingRoom?.id === room.id && editingRoom">
+              <td>{{ room.id }}</td>
+              <td>
+                <input type="text" [(ngModel)]="editingRoom!.name" class="edit-input">
+              </td>
+              <td>
+                <input type="text" [(ngModel)]="editingRoom!.type" class="edit-input">
+              </td>
+              <td>
+                <textarea [(ngModel)]="editingRoom!.description" class="edit-input"></textarea>
+              </td>
+              <td>
+                <input type="number" [(ngModel)]="editingRoom!.price" class="edit-input" min="0">
+              </td>
+              <td>
+                <input type="number" [(ngModel)]="editingRoom!.capacity" class="edit-input" min="1">
+              </td>
+              <td>
+                <input type="number" [(ngModel)]="editingRoom!.stock" class="edit-input" min="0">
+              </td>
+              <td>
+                <select [(ngModel)]="editingRoom!.available" class="edit-input">
+                  <option [value]="true">開放</option>
+                  <option [value]="false">關閉</option>
+                </select>
+              </td>
+              <td class="actions">
+                <button (click)="updateRoom()" class="btn btn-save">保存</button>
+                <button (click)="cancelRoomEdit()" class="btn btn-cancel">取消</button>
+              </td>
+            </ng-container>
+          </tr>
+        </tbody>
+      </table>
+      <div class="pagination" *ngIf="roomsTotalPages > 1">
+        <button (click)="roomsPreviousPage()" [disabled]="roomsCurrentPage === 0" class="btn-page">上一頁</button>
+        <span class="page-info">第 {{ roomsCurrentPage + 1 }} / {{ roomsTotalPages }} 頁 (共 {{ roomsTotalElements }}
+          筆)</span>
+        <button (click)="roomsNextPage()" [disabled]="roomsCurrentPage === roomsTotalPages - 1"
+          class="btn-page">下一頁</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 訂單管理內容 -->
+  <div *ngIf="activeTab === 'orders'" class="tab-content">
+    <div class="search-bar">
+      <input type="text" [(ngModel)]="ordersKeyword" placeholder="搜尋用戶名 / 地址 / 電話 / 訂單編號" style="min-width: 250px;">
+      <button class="btn btn-primary" (click)="searchOrders()">搜尋</button>
+    </div>
+    <div class="stats-summary">
+      <p>共 {{ ordersTotalElements }} 筆訂單</p>
+    </div>
+
+    <!-- 訂單列表 -->
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>訂單編號</th>
+            <th>用戶</th>
+            <th>總金額</th>
+            <th>商品數量</th>
+            <th>狀態</th>
+            <th>配送地址</th>
+            <th>聯絡電話</th>
+            <th>訂單時間</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of orders">
+            <ng-container *ngIf="editingOrder?.id !== order.id">
+              <td>#{{ order.id }}</td>
+              <td>{{ order.username }}</td>
+              <td>${{ order.totalPrice }}</td>
+              <td>{{ order.totalItems }}</td>
+              <td>
+                <span [class]="getOrderStatusClass(order.status)">
+                  {{ getOrderStatusLabel(order.status) }}
+                </span>
+              </td>
+              <td>{{ order.shippingAddress }}</td>
+              <td>{{ order.phoneNumber }}</td>
+              <td>{{ order.createdAt | date:'yyyy/MM/dd HH:mm' }}</td>
+              <td class="actions">
+                <button (click)="startOrderEdit(order)" class="btn btn-edit">編輯狀態</button>
+                <button (click)="deleteOrder(order)" class="btn btn-delete">刪除</button>
+              </td>
+            </ng-container>
+
+            <ng-container *ngIf="editingOrder?.id === order.id">
+              <td>#{{ order.id }}</td>
+              <td>{{ order.username }}</td>
+              <td>${{ order.totalPrice }}</td>
+              <td>{{ order.totalItems }}</td>
+              <td>
+                <select [(ngModel)]="editOrderStatus" class="edit-select">
+                  <option *ngFor="let opt of orderStatusOptions" [value]="opt.value">
+                    {{ opt.label }}
+                  </option>
+                </select>
+              </td>
+              <td>{{ order.shippingAddress }}</td>
+              <td>{{ order.phoneNumber }}</td>
+              <td>{{ order.createdAt | date:'yyyy/MM/dd HH:mm' }}</td>
+              <td class="actions">
+                <button (click)="updateOrderStatus()" class="btn btn-save">保存</button>
+                <button (click)="cancelOrderEdit()" class="btn btn-cancel">取消</button>
+              </td>
+            </ng-container>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 分頁控制 -->
+    <div class="pagination" *ngIf="ordersTotalPages > 1">
+      <button (click)="ordersPreviousPage()" [disabled]="ordersCurrentPage === 0" class="btn btn-pagination">
+        上一頁
+      </button>
+      <span class="pagination-info">
+        第 {{ ordersCurrentPage + 1 }} 頁 / 共 {{ ordersTotalPages }} 頁
+      </span>
+      <button (click)="ordersNextPage()" [disabled]="ordersCurrentPage >= ordersTotalPages - 1"
+        class="btn btn-pagination">
+        下一頁
+      </button>
+    </div>
+  </div>
+
+  <!-- 聯絡表單管理內容 -->
+  <div *ngIf="activeTab === 'contacts'" class="tab-content">
+    <div class="stats-summary">
+      <p>共 {{ contactsTotalElements }} 筆聯絡表單</p>
+    </div>
+
+    <!-- 聯絡表單列表 -->
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>姓名</th>
+            <th>Email</th>
+            <th>電話</th>
+            <th>訊息內容</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let contact of contacts">
+            <td>{{ contact.id }}</td>
+            <td>{{ contact.name }}</td>
+            <td>{{ contact.email }}</td>
+            <td>{{ contact.phone }}</td>
+            <td class="message-cell">{{ contact.message }}</td>
+            <td class="actions">
+              <button (click)="deleteContact(contact)" class="btn btn-delete">刪除</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 分頁控制 -->
+    <div class="pagination" *ngIf="contactsTotalPages > 1">
+      <button (click)="contactsPreviousPage()" [disabled]="contactsCurrentPage === 0" class="btn btn-pagination">
+        上一頁
+      </button>
+      <span class="pagination-info">
+        第 {{ contactsCurrentPage + 1 }} 頁 / 共 {{ contactsTotalPages }} 頁
+      </span>
+      <button (click)="contactsNextPage()" [disabled]="contactsCurrentPage >= contactsTotalPages - 1"
+        class="btn btn-pagination">
+        下一頁
+      </button>
+    </div>
+  </div>
+</div>

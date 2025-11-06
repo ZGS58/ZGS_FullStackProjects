@@ -1,0 +1,251 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+.slick-dots li button::before{
+  font-size: 1.25rem;
+}
+
+/*  */
+:root {
+  --info: #222;
+  --font-family: "Mulish", "Noto Sans TC", sans-serif;
+}
+
+*,
+::after,
+::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -webkit-transition: all 0.2s linear;
+  -moz-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+}
+*:focus {
+  outline: none;
+}
+
+body {
+  overflow-x: hidden;
+  overflow-y: overlay;
+  margin: 0;
+  min-height: 100vh;
+}
+
+header,
+footer,
+div,
+nav,
+article,
+hr,
+p,
+form,
+label,
+input,
+button,
+select,
+textarea,
+ul,
+li,
+img,
+svg,
+span,
+font,
+em,
+b,
+a,
+i {
+  text-align: left;
+  vertical-align: middle;
+  word-wrap: break-word;
+  word-break: break-word;
+  line-height: 1.7;
+  border-width: 0;
+  font-family: var(--font-family), sans-serif;
+  font-size: 16px;
+  color: var(--info);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  word-wrap: break-word;
+  word-break: break-word;
+  line-height: 1.7;
+  font-family: var(--font-family), sans-serif;
+  color: var(--info);
+}
+h1 *,
+h2 *,
+h3 *,
+h4 *,
+h5 *,
+h6 * {
+  font-size: inherit;
+}
+h1,
+.h1 {
+  font-weight: bold;
+  font-size: 2em;
+}
+h2,
+.h2 {
+  font-weight: bold;
+  font-size: 1.5em;
+}
+h3,
+.h3 {
+  font-weight: bold;
+  font-size: 1.17em;
+}
+h4,
+.h4 {
+  font-weight: bold;
+  font-size: 1em;
+}
+h5,
+.h5 {
+  font-weight: bold;
+  font-size: 0.83em;
+}
+h6,
+.h6 {
+  font-weight: bold;
+  font-size: 0.67em;
+}
+
+em,
+i {
+  font-style: inherit;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+a,
+a:link,
+a:visited,
+a:hover {
+  display: inline-block;
+  text-decoration: none;
+  white-space: pre-wrap;
+}
+
+.container {
+  margin-inline: auto;
+  width: min(95%, 1440px);
+}
+
+.flex-box {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 3em 6%;
+}
+.flex-box .auto-box {
+  width: 1%;
+  flex: 1 1 auto;
+}
+
+.list-box li {
+  padding-block: 1.3em;
+  border-bottom: 1px solid #d8d8d8;
+}
+.list-box li:last-child {
+  border-bottom: 0;
+}
+
+.img-fluid {
+  width: 100%;
+  height: auto;
+}
+
+.white {
+  color: #fff;
+}
+/* 跑馬燈 */
+.track {
+  position: absolute;
+  width: 100vw;
+  max-width: 100%;
+  overflow: hidden;
+  z-index: 0;
+  bottom: 0px;
+  white-space: nowrap;
+}
+.track p {
+  font-weight: 300;
+  font-size: 120px;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  line-height: 1;
+  will-change: transform;
+  animation: marquee 60s linear infinite;
+  color: #ffffff1c;
+}
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+
+/* 左右晃動 */
+@keyframes move {
+  0%,
+  65% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  70% {
+    -webkit-transform: rotate(6deg);
+    transform: rotate(6deg);
+  }
+
+  75% {
+    -webkit-transform: rotate(-6deg);
+    transform: rotate(-6deg);
+  }
+  80% {
+    -webkit-transform: rotate(6deg);
+    transform: rotate(6deg);
+  }
+
+  85% {
+    -webkit-transform: rotate(-6deg);
+    transform: rotate(-6deg);
+  }
+
+  90% {
+    -webkit-transform: rotate(6deg);
+    transform: rotate(6deg);
+  }
+
+  95% {
+    -webkit-transform: rotate(-6deg);
+    transform: rotate(-6deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+}

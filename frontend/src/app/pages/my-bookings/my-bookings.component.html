@@ -1,0 +1,45 @@
+<!-- my bookings area -->
+<section id="my-bookings-area" style="padding: 6vw 10%; background-color: #f9f9f9; min-height: 60vh;">
+    <h2 data-aos="fade-up" style="font-size: 2.5rem; color: #405751; font-family: 'Cormorant Garamond', serif;">我的訂房記錄
+    </h2>
+    <p data-aos="fade-up" style="margin: 1rem 0 2rem; color: #555; font-size: 1.1rem;">
+        管理您的所有訂房資訊
+    </p>
+
+    <div class="loading" *ngIf="loading">載入中...</div>
+
+    <div class="bookings-container" *ngIf="!loading">
+        <div class="booking-card" *ngFor="let booking of bookings" data-aos="fade-up">
+            <div class="booking-header">
+                <h3>{{ booking.roomName }}</h3>
+                <span class="status" [ngClass]="getStatusClass(booking.status)">
+                    {{ getStatusText(booking.status) }}
+                </span>
+            </div>
+
+            <div class="booking-info">
+                <div class="info-row">
+                    <span class="label">入住日期：</span>
+                    <span class="value">{{ booking.checkIn }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">退房日期：</span>
+                    <span class="value">{{ booking.checkOut }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">總金額：</span>
+                    <span class="value price">${{ booking.totalPrice }}</span>
+                </div>
+            </div>
+
+            <div class="booking-actions" *ngIf="booking.status === 'CONFIRMED'">
+                <button class="cancel-btn" (click)="cancelBooking(booking.id)">取消訂房</button>
+            </div>
+        </div>
+
+        <div class="no-bookings" *ngIf="bookings.length === 0">
+            <p>您目前沒有任何訂房記錄</p>
+            <a href="/room" class="browse-btn">瀏覽房型</a>
+        </div>
+    </div>
+</section>

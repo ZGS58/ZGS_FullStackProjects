@@ -1,0 +1,88 @@
+<div class="profile-container">
+  <h1>個人資料</h1>
+
+  <!-- 訊息提示 -->
+  <div *ngIf="message" class="alert alert-success">
+    {{ message }}
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-error">
+    {{ errorMessage }}
+  </div>
+
+  <!-- 用戶資料顯示 -->
+  <div *ngIf="user && !editMode && !passwordMode" class="user-info">
+    <div class="info-item">
+      <label>用戶名：</label>
+      <span>{{ user.username }}</span>
+    </div>
+    <div class="info-item">
+      <label>電子郵件：</label>
+      <span>{{ user.email }}</span>
+    </div>
+    <div class="info-item">
+      <label>姓名：</label>
+      <span>{{ user.fullname }}</span>
+    </div>
+
+    <div class="button-group">
+      <button (click)="toggleEditMode()" class="btn btn-primary">編輯資料</button>
+      <button (click)="togglePasswordMode()" class="btn btn-secondary">修改密碼</button>
+    </div>
+  </div>
+
+  <!-- 編輯資料表單 -->
+  <div *ngIf="editMode" class="edit-form">
+    <h2>編輯個人資料</h2>
+    <form (ngSubmit)="updateProfile()">
+      <div class="form-group">
+        <label>用戶名：</label>
+        <input type="text" [value]="user?.username" disabled class="form-control">
+        <small>用戶名無法修改</small>
+      </div>
+
+      <div class="form-group">
+        <label>電子郵件：</label>
+        <input type="email" [(ngModel)]="editForm.email" name="email" required class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label>姓名：</label>
+        <input type="text" [(ngModel)]="editForm.fullname" name="fullname" required class="form-control">
+      </div>
+
+      <div class="button-group">
+        <button type="submit" class="btn btn-primary">保存</button>
+        <button type="button" (click)="toggleEditMode()" class="btn btn-secondary">取消</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 修改密碼表單 -->
+  <div *ngIf="passwordMode" class="password-form">
+    <h2>修改密碼</h2>
+    <form (ngSubmit)="updatePassword()">
+      <div class="form-group">
+        <label>舊密碼：</label>
+        <input type="password" [(ngModel)]="passwordForm.oldPassword" name="oldPassword" required class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label>新密碼：</label>
+        <input type="password" [(ngModel)]="passwordForm.newPassword" name="newPassword" required class="form-control"
+          minlength="6">
+        <small>至少 6 個字元</small>
+      </div>
+
+      <div class="form-group">
+        <label>確認新密碼：</label>
+        <input type="password" [(ngModel)]="passwordForm.confirmPassword" name="confirmPassword" required
+          class="form-control">
+      </div>
+
+      <div class="button-group">
+        <button type="submit" class="btn btn-primary">修改密碼</button>
+        <button type="button" (click)="togglePasswordMode()" class="btn btn-secondary">取消</button>
+      </div>
+    </form>
+  </div>
+</div>

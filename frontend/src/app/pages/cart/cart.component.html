@@ -1,0 +1,92 @@
+<div class="cart-container">
+    <!-- 通知訊息 -->
+    <div class="notification" [class.show]="showNotificationDiv" [class.success]="notificationType === 'success'"
+        [class.error]="notificationType === 'error'" [class.info]="notificationType === 'info'">
+        <span class="notification-icon">
+            <ng-container *ngIf="notificationType === 'success'">✓</ng-container>
+            <ng-container *ngIf="notificationType === 'error'">✕</ng-container>
+            <ng-container *ngIf="notificationType === 'info'">ℹ</ng-container>
+        </span>
+        <span class="notification-message">{{ notificationMessage }}</span>
+    </div>
+
+    <h1>我的購物車</h1>
+
+    <div *ngIf="loading" class="loading">載入中...</div>
+
+    <div *ngIf="!loading && cart">
+        <!-- 購物車是空的 -->
+        <div *ngIf="cart.items.length === 0" class="empty-cart">
+            <p>購物車是空的</p>
+            <button class="btn-primary" (click)="continueShopping()">繼續購物</button>
+        </div>
+
+        <!-- 購物車有商品 -->
+        <div *ngIf="cart.items.length > 0" class="cart-content">
+            <!-- 商品列表 -->
+            <div class="cart-items">
+                <div *ngFor="let item of cart.items" class="cart-item">
+                    <div class="item-info">
+                        <h3>{{ item.productName }}</h3>
+                        <p class="item-price">單價: NT$ {{ item.productPrice }}</p>
+                    </div>
+
+                    <div class="item-controls">
+                        <div class="quantity-control">
+                            <button (click)="updateQuantity(item, item.quantity - 1)"
+                                [disabled]="item.quantity <= 1">-</button>
+                            <input type="number" [(ngModel)]="item.quantity"
+                                (change)="updateQuantity(item, item.quantity)" min="1" max="99" />
+                            <button (click)="updateQuantity(item, item.quantity + 1)"
+                                [disabled]="item.quantity >= 99">+</button>
+                        </div>
+
+                        <div class="item-subtotal">
+                            <span>小計: NT$ {{ item.subtotal }}</span>
+                        </div>
+
+                        <button class="btn-remove" (click)="removeItem(item)">移除</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 總計區域 -->
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span>商品總數:</span>
+                    <span>{{ cart.totalItems }} 件</span>
+                </div>
+                <div class="summary-row total">
+                    <span>總金額:</span>
+                    <span class="total-price">NT$ {{ cart.totalPrice }}</span>
+                </div>
+
+                <div class="action-buttons">
+                    <!-- 結帳表單 -->
+                    <div class="checkout-form">
+                        <label>
+                            配送地址
+                            <input type="text" [(ngModel)]="shippingAddress" placeholder="請輸入配送地址" />
+                        </label>
+                        <hr>
+                        <label>
+                            聯絡電話
+                            <input type="tel" [(ngModel)]="phoneNumber" placeholder="請輸入聯絡電話" />
+                        </label>
+                        <hr>
+                        <label>
+                            備註（選填）
+                            <input type="text" [(ngModel)]="note" placeholder="備註（例如：希望時段）" />
+                        </label>
+                    </div>
+
+                    <button class="btn-secondary" (click)="continueShopping()">繼續購物</button>
+                    <button class="btn-danger" (click)="clearCart()">清空購物車</button>
+                    <button class="btn-primary" [disabled]="checkingOut" (click)="checkout()">
+                        {{ checkingOut ? '結帳中…' : '前往結帳' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

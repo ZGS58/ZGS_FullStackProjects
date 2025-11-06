@@ -1,0 +1,39 @@
+<!--  -->
+<section id="contact" style="padding: 6vw 10%; background-color: #f9f9f9;">
+  <h2 data-aos="fade-up" style="font-size: 2.5rem; color: #405751; font-family: 'Cormorant Garamond', serif;">聯絡我們
+  </h2>
+  <p data-aos="fade-up" style="margin-bottom: 2rem; color: #555;">若您有任何疑問或合作提案，歡迎填寫表單或直接聯繫我們。</p>
+
+  <div class="contact-container">
+    <!-- 表單 -->
+    <form class="contact-form" data-aos="fade-right" (ngSubmit)="submit()">
+      <label for="name">姓名</label>
+      <input type="text" id="name" placeholder="請輸入您的姓名" [(ngModel)]="contact.name" name="name" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="請輸入您的Email" [(ngModel)]="contact.email" name="email" required>
+
+      <label for="phone">聯絡電話</label>
+      <input type="tel" id="phone" placeholder="請輸入電話號碼" [(ngModel)]="contact.phone" name="phone">
+
+      <label for="message">留言內容</label>
+      <textarea id="message" rows="5" placeholder="請輸入您的問題或訊息" [(ngModel)]="contact.message" name="message"
+        required></textarea>
+
+      <button type="submit">送出訊息</button>
+      <!--  -->
+      <p *ngIf="success" style="color:green;">訊息已成功送出!</p>
+    </form>
+
+    <!-- 聯絡資訊 -->
+    <div class="contact-info" data-aos="fade-left">
+      <h3>THE TRÈSOR 客戶服務</h3>
+      <p>電話:<a href="tel:+888-0-0000000">+888-0-0000000</a></p>
+      <p>Email:<a href="mailto:xxxxx@gmail.com">{{ email }}</a></p>
+      <p>地址:xxxxx, Utopia</p>
+      <br>
+      <iframe src="https://www.google.com/maps/embed?pb=..." width="100%" height="250" style="border:0;"
+        allowfullscreen="" loading="lazy"></iframe>
+    </div>
+  </div>
+</section>

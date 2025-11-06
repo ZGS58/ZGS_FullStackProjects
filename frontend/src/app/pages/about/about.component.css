@@ -1,0 +1,156 @@
+* {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+#about-page {
+  padding: 6vw 10%;
+  background:url("/bg_img.png") center center;
+}
+
+#about-page h2 {
+  font-size: 2.5rem;
+  color: #405751;
+  font-family: "Cormorant Garamond", serif;
+}
+
+#about-page p {
+  margin: 1.5rem 0 3rem;
+  color: #555;
+  font-size: 1.1rem;
+}
+
+#about-page .founder {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: center;
+}
+
+#about-page .founder .founder-img {
+  flex: 1;
+}
+
+#about-page .founder .founder-text {
+  flex: 1;
+}
+#about-page .founder .founder-text h3 {
+  font-size: 1.75rem;
+  color: #405751;
+}
+#about-page .founder .founder-text p {
+  margin-top: 1rem;
+  color: #333;
+}
+
+#about-page .brandConcept {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: center;
+  margin-top: 4rem;
+}
+#about-page .brandConcept .brandConcept-text {
+  flex: 1;
+}
+#about-page .brandConcept .brandConcept-text h3 {
+  font-size: 1.75rem;
+  color: #405751;
+}
+#about-page .brandConcept .brandConcept-text p {
+  margin-top: 1rem;
+  color: #333;
+}
+
+#about-page .brandConcept .brandConcept-img {
+  flex: 1;
+}
+#about-page .brandConcept .brandConcept-img img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  #about-page .founder,
+  #about-page .brandConcept {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #about-page .founder .founder-img,
+  #about-page .brandConcept .brandConcept-img {
+    flex: none;
+    width: 100%;
+  }
+
+  #about-page .founder .founder-text,
+  #about-page .brandConcept .brandConcept-text {
+    flex: none;
+    width: 100%;
+  }
+
+}
+
+
+#about-page .milestone {
+  margin-top: 5rem;
+}
+#about-page .milestone h3 {
+  font-size: 1.75rem;
+  color: #405751;
+  text-align: center;
+}
+
+.milestone .timeline {
+  position: relative;
+  margin-top: 3rem;
+  padding-left: 20px;
+  border-left: 2px solid #405751;
+  overflow-y: hidden;
+}
+
+.milestone .timeline .timeline-item {
+  position: relative;
+  margin-bottom: 2rem;
+  padding-left: 20px;
+}
+
+.milestone .timeline .timeline-item .timeline-dot {
+  position: absolute;
+  left: -10px;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  background-color: #405751;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px #405751;
+}
+
+.milestone .timeline .timeline-item .timeline-content h4 {
+  font-size: 1.2rem;
+  color: #405751;
+  margin-bottom: 5px;
+  font-family: "Cormorant Garamond", serif;
+}
+
+.milestone .timeline .timeline-item .timeline-content p {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .timeline {
+    padding-left: 15px;
+  }
+
+  .timeline-content h4 {
+    font-size: 1.1rem;
+  }
+
+  .timeline-content p {
+    font-size: 0.95rem;
+  }
+}

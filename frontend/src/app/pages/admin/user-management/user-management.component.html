@@ -1,0 +1,67 @@
+<div class="user-management-container">
+  <h1>用戶管理</h1>
+
+  <!-- 訊息提示 -->
+  <div *ngIf="message" class="alert alert-success">
+    {{ message }}
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-error">
+    {{ errorMessage }}
+  </div>
+
+  <!-- 用戶列表 -->
+  <div class="users-table-container">
+    <table class="users-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>用戶名</th>
+          <th>電子郵件</th>
+          <th>姓名</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <ng-container *ngIf="editingUser?.id !== user.id">
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.fullname }}</td>
+            <td class="actions">
+              <button (click)="startEdit(user)" class="btn btn-edit">編輯</button>
+              <button (click)="deleteUser(user)" class="btn btn-delete">刪除</button>
+            </td>
+          </ng-container>
+
+          <!-- 編輯模式 -->
+          <ng-container *ngIf="editingUser?.id === user.id">
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>
+              <input type="email" [(ngModel)]="editForm.email" class="edit-input">
+            </td>
+            <td>
+              <input type="text" [(ngModel)]="editForm.fullname" class="edit-input">
+            </td>
+            <td class="actions">
+              <button (click)="updateUser()" class="btn btn-save">保存</button>
+              <button (click)="cancelEdit()" class="btn btn-cancel">取消</button>
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 分頁控制 -->
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button (click)="previousPage()" [disabled]="currentPage === 0" class="btn-page">上一頁</button>
+
+      <span class="page-info">
+        第 {{ currentPage + 1 }} / {{ totalPages }} 頁 (共 {{ totalElements }} 筆)
+      </span>
+
+      <button (click)="nextPage()" [disabled]="currentPage === totalPages - 1" class="btn-page">下一頁</button>
+    </div>
+  </div>
+</div>

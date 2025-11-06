@@ -1,0 +1,154 @@
+﻿.login-modal-container {
+  overflow-y: hidden;
+}
+/* 關閉按鈕 */
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 32px;
+  color: #999;
+  cursor: pointer;
+  width: auto;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s;
+  z-index: 10;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+/* Tab 切換 */
+.tabs {
+  display: flex;
+  border-bottom: 2px solid #f0f0f0;
+  padding: 0 30px;
+  padding-top: 30px;
+}
+
+.tab {
+  flex: 1;
+  padding: 15px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: 16px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-bottom: -2px;
+}
+
+.tab:hover {
+  color: #333;
+}
+
+.tab.active {
+  color: #7ba99d;
+  border-bottom: 3px solid #7ba99d;
+}
+
+/* 表單容器 */
+.form-container {
+  padding: 30px;
+  animation: fadeInUp 0.4s ease;
+}
+
+.form-container h2 {
+  margin: 0 0 25px;
+  font-size: 24px;
+  color: #333;
+  text-align: center;
+}
+
+/* 表單組 */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #555;
+  font-size: 14px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #7ba99d;
+}
+
+/* 提交按鈕 */
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #7ba99d;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-align: center;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(123, 169, 157, 0.4);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 警告訊息 */
+.alert {
+  padding: 12px 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  animation: fadeIn 0.3s ease;
+}
+
+.alert-danger {
+  background: #fff5f5;
+  color: #c53030;
+  border: 1px solid #feb2b2;
+}
+
+.alert-success {
+  background: #f0fff4;
+  color: #2f855a;
+  border: 1px solid #9ae6b4;
+}
+
+/* 動畫 */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

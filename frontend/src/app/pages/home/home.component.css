@@ -1,0 +1,425 @@
+* {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  user-select: none;
+}
+
+/* welcome-area */
+#welcome-area {
+  padding: 6vw 10%;
+  text-align: center;
+  background-image: url("/bg_img2.png");
+  position: relative;
+  overflow-y: hidden;
+}
+
+@media (max-width: 992px) {
+  #welcome-area {
+    padding: 6vw 5%;
+  }
+}
+
+.bg-img {
+  position: absolute;
+  z-index: -1;
+  width: 450px;
+  height: auto;
+}
+
+.welcome-bg1 {
+  top: 0;
+  right: 9%;
+  rotate: 292.65deg;
+  animation: move 5s 0s infinite;
+  -webkit-animation: move 5s 0s infinite;
+}
+.welcome-bg2 {
+  top: 31%;
+  right: 1%;
+  animation: move 3s 0s infinite;
+  -webkit-animation: move 3s 0s infinite;
+}
+.welcome-bg3 {
+  top: 35%;
+  left: -2%;
+  animation: move 5s 0s infinite;
+  -webkit-animation: move 5s 0s infinite;
+}
+.welcome-bg4 {
+  top: 38%;
+  left: -2%;
+  animation: move 2s 0s infinite;
+  -webkit-animation: move 2s 0s infinite;
+}
+.welcome-bg5 {
+  top: 80%;
+  right: 2%;
+  rotate: 44.75deg;
+  animation: move 5s 0s infinite;
+  -webkit-animation: move 5s 0s infinite;
+}
+.welcome-bg6 {
+  bottom: 0%;
+  left: -11%;
+  rotate: 254.65deg;
+  animation: move 7s 0s infinite;
+  -webkit-animation: move 7s 0s infinite;
+}
+
+@media (max-width: 768px) {
+  .bg-img {
+    width: 50%;
+    opacity: 0.5;
+  }
+}
+
+#welcome-area h2 {
+  font-size: clamp(25px, 1.7vw, 36px);
+  color: #405751;
+  font-family: "Cormorant Garamond", serif;
+}
+#welcome-area p {
+  font-size: clamp(15px, 0.95vw, 20px);
+  color: #555555;
+  text-align: center;
+  margin-bottom: 70px;
+}
+@media screen and (max-width: 768px) {
+  #welcome-area h2 {
+    display: block;
+  }
+  #welcome-area p {
+    margin-top: 2rem;
+    margin-bottom: 40px;
+  }
+}
+
+#welcome-area .welcome-card1,
+.welcome-card3 {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 50px;
+}
+
+#welcome-area .card1-img {
+  width: 35%;
+}
+#welcome-area .card3-img {
+  width: 45%;
+}
+#welcome-area .card2-img {
+  width: 30%;
+}
+
+@media (max-width: 992px) {
+  #welcome-area .welcome-card1,
+  .welcome-area .welcome-card3 {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #welcome-area .card1-img,
+  #welcome-area .card3-img {
+    width: 80%;
+    order: 1;
+  }
+
+  #welcome-area .card2-img {
+    width: 60%;
+  }
+
+  #welcome-area .card1-text,
+  #welcome-area .card3-text {
+    width: 90%;
+    margin-top: 30px;
+    order: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  #welcome-area .card1-img,
+  #welcome-area .card3-img,
+  #welcome-area .card2-img {
+    width: 90%;
+  }
+}
+
+#welcome-area .card1-text,
+.card3-text {
+  width: 340px;
+  margin-top: 70px;
+}
+
+#welcome-area .card1-subTitle,
+.card3-subTitle {
+  font-size: clamp(16px, 0.95vw, 20px);
+  color: #282b32;
+  font-family: "Cormorant Garamond", serif;
+}
+#welcome-area .card1-title,
+.card3-title {
+  font-size: clamp(32px, 2.85vw, 60px);
+  color: #405751;
+  font-family: "Cormorant Garamond", serif;
+  font-weight: normal;
+}
+#welcome-area .card1-content,
+.card3-content {
+  font-size: clamp(16px, 0.95vw, 20px);
+  color: #282b32;
+}
+
+/* view more-area */
+#viewMore-area {
+  padding: 6vw 10%;
+  background: #405751 url("/bg_img.png") no-repeat center center;
+  background-size: cover;
+  background-blend-mode: multiply; /* 混合模式 */
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 992px) {
+  #viewMore-area {
+    padding: 6vw 5%;
+  }
+}
+
+#viewMore-area .img-box {
+  margin-left: 6vw;
+  position: relative;
+  z-index: 2;
+}
+
+#viewMore-area .card-box {
+  top: 20%;
+  right: 15%;
+  position: absolute;
+  background: #fff;
+  width: 35%;
+  padding: 40px 40px;
+  z-index: 3;
+}
+
+@media (max-width: 1200px) {
+  #viewMore-area .img-box {
+    margin-left: 0;
+    width: 60%;
+  }
+
+  #viewMore-area .card-box {
+    width: 45%;
+    right: 5%;
+  }
+}
+
+@media (max-width: 992px) {
+  #viewMore-area {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #viewMore-area .img-box {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  #viewMore-area .card-box {
+    position: relative;
+    width: 90%;
+    margin: -50px auto 0;
+    right: 0;
+    top: 0;
+  }
+}
+
+#viewMore-area .card-box .subTitle-box p {
+  font-size: clamp(16px, 0.95vw, 20px);
+  color: #282b32;
+  font-family: "Cormorant Garamond", serif;
+}
+#viewMore-area .card-box .title-box h2 {
+  font-size: clamp(32px, 2.85vw, 60px);
+  color: #405751;
+  font-family: "Cormorant Garamond", serif;
+  width: 100%;
+  font-weight: normal;
+}
+
+@media (max-width: 768px) {
+  #viewMore-area .card-box .title-box h2 {
+    width: 100%;
+  }
+}
+
+#viewMore-area article p {
+  font-size: clamp(16px, 0.95vw, 20px);
+  color: #282b32;
+}
+#viewMore-area .card-box .card-btn {
+  display: inline-block;
+  margin-top: 20px;
+}
+#viewMore-area .card-box .card-btn a {
+  text-decoration: none;
+  color: #405751;
+  padding: 6px 10px;
+  border: 2px solid #405751;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(0.75rem, 1.8vw, 1rem);
+  display: flex;
+  align-items: center;
+}
+#viewMore-area .card-box .card-btn a:hover {
+  background-color: #405751;
+  color: #fff;
+  transition: all 0.5s ease;
+}
+#viewMore-area .viewMore-bg1 {
+  top: 35%;
+  left: 65%;
+  z-index: -2;
+  animation: move 3s 0s infinite;
+  -webkit-animation: move 3s 0s infinite;
+}
+#viewMore-area .viewMore-bg2 {
+  top: 25%;
+  left: 68%;
+  z-index: -1;
+  rotate: 328.62deg;
+  animation: move 7s 0s infinite;
+  -webkit-animation: move 7s 0s infinite;
+}
+#viewMore-area .viewMore-bg3 {
+  top: 0%;
+  left: 0%;
+  z-index: 0;
+  animation: move 5s 0s infinite;
+  -webkit-animation: move 5s 0s infinite;
+}
+
+@media (max-width: 768px) {
+  #viewMore-area .viewMore-bg1,
+  #viewMore-area .viewMore-bg2,
+  #viewMore-area .viewMore-bg3 {
+    width: 80%;
+    opacity: 0.5;
+  }
+}
+
+/* News */
+#news-area {
+  padding: 6vw 10%;
+  background: url("/bg_img.png") no-repeat center center;
+}
+
+@media (max-width: 992px) {
+  #news-area {
+    padding: 6vw 5%;
+  }
+}
+
+#news-area .news-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+#news-area .news-title h2 {
+  font-size: clamp(32px, 2.85vw, 60px);
+  color: #405751;
+  font-family: "Cormorant Garamond", serif;
+  font-weight: normal;
+}
+#news-area .news-title .news-btn {
+  display: inline-block;
+}
+#news-area .news-title .news-btn a {
+  text-decoration: none;
+  color: #405751;
+  padding: 6px 10px;
+  border: 1px solid #405751;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(0.75rem, 1.8vw, 1rem);
+  display: flex;
+  align-items: center;
+}
+
+#news-area .news-title .news-btn a:hover {
+  background-color: #405751;
+  color: #fff;
+  transition: all 0.5s ease;
+}
+
+.room-list {
+  display: flex;
+  width: 100%;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.room-card {
+  width: calc((100% - 80px) / 3);
+  overflow-y: hidden;
+}
+
+@media (max-width: 992px) {
+  .room-list {
+    gap: 30px;
+  }
+  .room-card {
+    width: calc((100% - 30px) / 2);
+  }
+}
+
+@media (max-width: 768px) {
+  .room-list {
+    gap: 20px;
+  }
+  .room-card {
+    width: 100%;
+  }
+}
+
+.room-img img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .room-img img {
+    height: 250px;
+  }
+}
+
+.room-time p {
+  color: #405751;
+}
+
+.room-title {
+  font-size: clamp(20px, 1.3vw, 30px);
+  color: #405751;
+  font-weight: 700;
+}
+
+.room-content {
+  color: #282b32;
+  font-weight: 400;
+  font-size: clamp(16px, 1vw, 20px);
+  line-height: 30px;
+}
+
+.room-btn .room-view {
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(15px, 0.95vw, 20px);
+  font-weight: 700;
+  color: #405751;
+}
